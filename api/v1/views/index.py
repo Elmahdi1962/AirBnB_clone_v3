@@ -20,7 +20,7 @@ classes = {"amenities": Amenity, "cities": City,
 @app_views.route('/status')
 def status():
     '''returns json object with the app status'''
-    return jsonify({"status": "ok"})
+    return jsonify({"status": "OK"})
 
 
 @app_views.route('/stats')
