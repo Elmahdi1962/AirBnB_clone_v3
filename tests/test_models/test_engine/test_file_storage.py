@@ -118,15 +118,29 @@ class TestFileStorage(unittest.TestCase):
     @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
     def test_get(self):
         '''test that get method works properly'''
-        storage = FileStorage()
+        storage = models.storage
         getobj = storage.get(State, '02314')
         self.assertEqual(getobj, None)
-
         newobj = City(name='figuig')
         newobj.save()
         obj_id = newobj.id
         getobj = storage.get(City, obj_id)
         self.assertEqual(getobj, newobj)
+        obj = State(name='Michigan')
+        obj.save()
+        self.assertEqual(obj.id, storage.get(State, obj.id).id)
+        self.assertEqual(obj.name, storage.get(State, obj.id).name)
+        self.assertIsNot(obj, storage.get(State, obj.id + 'op'))
+        self.assertIsNone(storage.get(State, obj.id + 'op'))
+        self.assertIsNone(storage.get(State, 45))
+        self.assertIsNone(storage.get(None, obj.id))
+        self.assertIsNone(storage.get(int, obj.id))
+        with self.assertRaises(TypeError):
+            storage.get(State, obj.id, 'op')
+        with self.assertRaises(TypeError):
+            storage.get(State)
+        with self.assertRaises(TypeError):
+            storage.get()
 
     @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
     def test_count(self):
