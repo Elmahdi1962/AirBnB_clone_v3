@@ -10,8 +10,8 @@ import os
 
 
 app = Flask(__name__)
-CORS(app, resources={r'/*': {'origins': '0.0.0.0'}})
 app.register_blueprint(app_views)
+cors = CORS(app, resources={r'/*': {'origins': '0.0.0.0'}})
 
 
 @app.teardown_appcontext
@@ -28,6 +28,6 @@ def errorhandler(error):
 
 
 if __name__ == '__main__':
-    host = os.environ.get('HBNB_API_HOST', '0.0.0.0')
-    port = os.environ.get('HBNB_API_PORT', '5000')
+    host = os.getenv('HBNB_API_HOST', '0.0.0.0')
+    port = os.getenv('HBNB_API_PORT', '5000')
     app.run(host=host, port=port, threaded=True)
