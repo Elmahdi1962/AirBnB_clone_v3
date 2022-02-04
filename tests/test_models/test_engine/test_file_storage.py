@@ -145,7 +145,7 @@ class TestFileStorage(unittest.TestCase):
     @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
     def test_count(self):
         '''test that count method works properly'''
-        storage = FileStorage()
+        storage = models.storage
         state_count = storage.count(State)
         storage_count = len(storage.all(State))
         self.assertEqual(state_count, storage_count)
@@ -159,3 +159,20 @@ class TestFileStorage(unittest.TestCase):
         state_count = storage.count()
         storage_count = len(storage.all())
         self.assertEqual(state_count, storage_count)
+
+        storage = models.storage
+        self.assertIs(type(storage.count()), int)
+        self.assertIs(type(storage.count(None)), int)
+        self.assertIs(type(storage.count(int)), int)
+        self.assertIs(type(storage.count(State)), int)
+        self.assertEqual(storage.count(), storage.count(None))
+        State(name='Lagos').save()
+        self.assertGreater(storage.count(State), 0)
+        self.assertEqual(storage.count(), storage.count(None))
+        a = storage.count(State)
+        State(name='Enugu').save()
+        self.assertGreater(storage.count(State), a)
+        Amenity(name='Free WiFi').save()
+        self.assertGreater(storage.count(), storage.count(State))
+        with self.assertRaises(TypeError):
+            storage.count(State, 'op')
