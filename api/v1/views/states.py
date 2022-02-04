@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 '''states blueprint'''
 
 from api.v1.views import app_views
@@ -62,7 +62,7 @@ def updateState(state_id=None):
 
     body = request.get_json()
     if body is None:
-        abort(404, 'Not a JSON')
+        abort(400, 'Not a JSON')
     for key in body.keys():
         if key != 'id' and key != 'created_at' and key != 'updated_at':
             setattr(obj, key, body[key])

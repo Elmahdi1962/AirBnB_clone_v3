@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 '''reviews blueprint'''
 
 import re

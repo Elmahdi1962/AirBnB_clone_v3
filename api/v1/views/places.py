@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 '''places blueprint'''
 
 from api.v1.views import app_views
