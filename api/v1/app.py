@@ -12,7 +12,6 @@ import os
 app = Flask(__name__)
 CORS(app, resources={r'/*': {'origins': '0.0.0.0'}})
 app.register_blueprint(app_views)
-app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
 
 
 @app.teardown_appcontext
@@ -25,7 +24,7 @@ def teardown(exception):
 @app.errorhandler(404)
 def errorhandler(error):
     '''404 error handler'''
-    return make_response(jsonify({'error': 'Not found'}), 400)
+    return make_response(jsonify({'error': 'Not found'}), 404)
 
 
 if __name__ == '__main__':
