@@ -44,11 +44,11 @@ def postUser():
     '''posts a new user'''
     body = request.get_json()
     if body is None or type(body)is not dict:
-        abort(400, 'Not a JSON')
+        abort(400, description='Not a JSON')
     if 'email' not in body.keys():
-        abort(400, 'Missing email')
+        abort(400, description='Missing email')
     if 'password' not in body.keys():
-        abort(400, 'Missing password')
+        abort(400, description='Missing password')
 
     user = User(**body)
     user.save()
@@ -68,7 +68,7 @@ def updateUser(user_id=None):
 
     body = request.get_json()
     if body is None:
-        abort(400, 'Not a JSON')
+        abort(400, description='Not a JSON')
     for key in body.keys():
         if key not in ['id', 'created_at', 'updated_at', 'email']:
             setattr(obj, key, body[key])
