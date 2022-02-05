@@ -42,10 +42,10 @@ def deleteState(state_id=None):
 def postState():
     '''posts a new state'''
     body = request.get_json()
-    if body is None:
-        abort(400, 'Not a JSON')
+    if body is None or type(body)is not dict:
+        abort(400, description='Not a JSON')
     if 'name' not in body.keys():
-        abort(400, 'Missing name')
+        abort(400, description='Missing name')
     obj = State(**body)
     obj.save()
     return make_response(jsonify(obj.to_dict()), 201)
