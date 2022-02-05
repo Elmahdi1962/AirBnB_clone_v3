@@ -47,7 +47,7 @@ def deleteUser(user_id=None):
 def postUser():
     '''posts a new user'''
     body = request.get_json()
-    if body is None:
+    if body is None or type(body)is not dict:
         abort(400, 'Not a JSON')
     if 'email' not in body.keys():
         abort(400, 'Missing email')
