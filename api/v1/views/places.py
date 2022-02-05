@@ -117,21 +117,20 @@ def placesSearch():
 
     places = storage.all(Place).values()
     wanted_places = []
-    states = []
-    cities = set()
+    cities = {}
 
     if 'cities' in keys:
         for cityId in body['cities']:
-            cities.add(cityId)
+            cities[cityId] = cityId
 
     if 'states' in keys:
         for state in storage.all(State).values():
             if state.id in body['states']:
                 for city in state.cities:
-                    cities.add(city.id)
+                    cities[city.id] = city.id
 
     for place in places:
-        if 'cities' in keys:
+        if len(cities) > 0:
             if place.city_id in cities:
                 wanted_places.append(place)
     unwanted = []
