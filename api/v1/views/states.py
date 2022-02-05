@@ -7,8 +7,8 @@ from models import storage
 from models.state import State
 
 
-@app_views.route('/states', methods=['GET'])
-@app_views.route('/states/<state_id>', methods=['GET'])
+@app_views.route('/states', methods=['GET'], strict_slashes=False)
+@app_views.route('/states/<state_id>', methods=['GET'], strict_slashes=False)
 def getStates(state_id=None):
     '''gets all states or state with the id passed'''
     if state_id is None:
@@ -25,7 +25,8 @@ def getStates(state_id=None):
 
 
 @app_views.route('/states/<state_id>',
-                 methods=['DELETE'])
+                 methods=['DELETE'],
+                 strict_slashes=False)
 def deleteState(state_id=None):
     '''deletes a state'''
     if state_id is not None:
@@ -37,7 +38,7 @@ def deleteState(state_id=None):
     abort(400)
 
 
-@app_views.route('/states', methods=['POST'])
+@app_views.route('/states', methods=['POST'], strict_slashes=False)
 def postState():
     '''posts a new state'''
     body = request.get_json()
@@ -50,7 +51,7 @@ def postState():
     return make_response(jsonify(obj.to_dict()), 201)
 
 
-@app_views.route('/states/<state_id>', methods=['PUT'])
+@app_views.route('/states/<state_id>', methods=['PUT'], strict_slashes=False)
 def updateState(state_id=None):
     '''updates a state'''
     if state_id is None:
