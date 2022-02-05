@@ -98,7 +98,12 @@ def placesSearch():
        ('cities' not in keys or len(body['cities']) <= 0)):
         if 'amenities' not in keys:
             places = storage.all(Place).values()
-            return jsonify([pl.to_dict() for pl in places])
+            dcts = [pl.to_dict() for pl in places]
+            if storage_t == 'db':
+                for idx in range(len(dcts)):
+                    if 'amenities' in dcts[idx].keys():
+                        del dcts[idx]['amenities']
+            return jsonify(dcts)
         else:
             places = storage.all(Place).values()
             unwanted = []
@@ -113,7 +118,12 @@ def placesSearch():
                         break
             for i in unwanted:
                     del places[i]
-            return jsonify([p.to_dict() for p in places])
+            dcts = [pl.to_dict() for pl in places]
+            if storage_t == 'db':
+                for idx in range(len(dcts)):
+                    if 'amenities' in dcts[idx].keys():
+                        del dcts[idx]['amenities']
+            return jsonify(dcts)
 
     places = storage.all(Place).values()
     wanted_places = []
@@ -147,7 +157,12 @@ def placesSearch():
 
     for i in unwanted:
         del wanted_places[i]
-    return jsonify([p.to_dict() for p in wanted_places])
+    dcts = [pl.to_dict() for pl in wanted_places]
+    if storage_t == 'db':
+        for idx in range(len(dcts)):
+            if 'amenities' in dcts[idx].keys():
+                del dcts[idx]['amenities']
+    return jsonify(dcts)
 
 
 @app_views.route('/places/<place_id>',
