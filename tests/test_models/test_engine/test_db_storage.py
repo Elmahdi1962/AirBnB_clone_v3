@@ -94,14 +94,14 @@ class TestDBStorage(unittest.TestCase):
         getobj = storage.get(State, '02314')
         self.assertEqual(getobj, None)
 
-        newobj = City(name='zenaga')
+        newobj = State(name='zenaga')
         newobj.save()
         obj_id = newobj.id
-        getobj = storage.get(City, obj_id)
+        getobj = storage.get(State, obj_id)
         self.assertEqual(getobj, newobj)
-        self.assertEqual(newobj.id, storage.get(City, obj_id).id)
-        self.assertEqual(newobj.name, storage.get(City, newobj.id).name)
-        self.assertIsNot(newobj, storage.get(City, newobj.id + '001'))
+        self.assertEqual(newobj.id, storage.get(State, obj_id).id)
+        self.assertEqual(newobj.name, storage.get(State, newobj.id).name)
+        self.assertIsNot(newobj, storage.get(State, newobj.id + '001'))
         self.assertIsNone(storage.get(State, newobj.id + '002'))
         obj = State(name='Michigan')
         obj.save()
@@ -122,7 +122,7 @@ class TestDBStorage(unittest.TestCase):
     @unittest.skipIf(models.storage_t != 'db', "not testing file storage")
     def test_count(self):
         '''test that count method works properly'''
-        storage = models.storage()
+        storage = models.storage
         state_count = storage.count(State)
         storage_count = len(storage.all(State))
         self.assertEqual(state_count, storage_count)
