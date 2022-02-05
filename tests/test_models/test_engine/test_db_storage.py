@@ -68,41 +68,25 @@ test_db_storage.py'])
                             "{:s} method needs a docstring".format(func[0]))
 
 
+@unittest.skipIf(models.storage_t != 'db', "not testing db storage")
 class TestDBStorage(unittest.TestCase):
     """Test the FileStorage class"""
-    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_all_returns_dict(self):
         """Test that all returns a dictionaty"""
         self.assertIs(type(models.storage.all()), dict)
 
-    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_all_no_class(self):
         """Test that all returns all rows when no class is passed"""
 
-    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_new(self):
         """test that new adds an object to the database"""
 
-    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_save(self):
         """Test that save properly saves objects to file.json"""
 
-    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_get(self):
-        '''test that get method works properly'''
+        """test that get returns an object of a given class by id."""
         storage = models.storage
-        getobj = storage.get(State, '02314')
-        self.assertEqual(getobj, None)
-
-        newobj = State(name='zenaga')
-        newobj.save()
-        obj_id = newobj.id
-        getobj = storage.get(State, obj_id)
-        self.assertEqual(getobj, newobj)
-        self.assertEqual(newobj.id, storage.get(State, obj_id).id)
-        self.assertEqual(newobj.name, storage.get(State, newobj.id).name)
-        self.assertIsNot(newobj, storage.get(State, newobj.id + '001'))
-        self.assertIsNone(storage.get(State, newobj.id + '002'))
         obj = State(name='Michigan')
         obj.save()
         self.assertEqual(obj.id, storage.get(State, obj.id).id)
@@ -119,24 +103,9 @@ class TestDBStorage(unittest.TestCase):
         with self.assertRaises(TypeError):
             storage.get()
 
-    @unittest.skipIf(models.storage_t != 'db', "not testing file storage")
     def test_count(self):
-        '''test that count method works properly'''
+        """test that count returns the number of objects of a given class."""
         storage = models.storage
-        state_count = storage.count(State)
-        storage_count = len(storage.all(State))
-        self.assertEqual(state_count, storage_count)
-
-        newobj = State(name='oujda')
-        newobj.save()
-        state_count = storage.count(State)
-        storage_count += 1
-        self.assertEqual(state_count, storage_count)
-
-        state_count = storage.count()
-        storage_count = len(storage.all())
-        self.assertEqual(state_count, storage_count)
-
         self.assertIs(type(storage.count()), int)
         self.assertIs(type(storage.count(None)), int)
         self.assertIs(type(storage.count(int)), int)
