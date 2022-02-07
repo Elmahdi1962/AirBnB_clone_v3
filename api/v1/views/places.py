@@ -116,8 +116,8 @@ def placesSearch():
                     if amenity_id not in amens_ids:
                         unwanted.append(idx)
                         break
-            for i in unwanted:
-                    del places[i]
+            for idx, i in enumerate(unwanted):
+                del places[i - idx]
             dcts = [pl.to_dict() for pl in places]
             if storage_t == 'db':
                 for idx in range(len(dcts)):
@@ -155,8 +155,8 @@ def placesSearch():
                     unwanted.append(idx)
                     break
 
-    for i in unwanted:
-        del wanted_places[i]
+    for idx, i in enumerate(unwanted):
+        del wanted_places[i - idx]
     dcts = [pl.to_dict() for pl in wanted_places]
     if storage_t == 'db':
         for idx in range(len(dcts)):
