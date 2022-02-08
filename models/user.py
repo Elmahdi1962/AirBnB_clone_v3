@@ -33,6 +33,6 @@ class User(BaseModel, Base):
         """Overrides the __setattr__ method"""
         if __name == "password":
             md5_hash = hashlib.md5(bytes(__value, "utf-8"))
-            self.__dict__[__name] = md5_hash.hexdigest()
+            self.__setattr__(__name, md5_hash.hexdigest())
         else:
-            self.__dict__[__name] = __value
+            self.__setattr__(__name, __value)
