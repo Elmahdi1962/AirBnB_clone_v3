@@ -90,7 +90,7 @@ def postPlace(city_id):
 def placesSearch():
     '''retrives all place objects depending on the request body'''
     body = request.get_json()
-    if body is None:
+    if type(body) is not dict:
         abort(400, 'Not a JSON')
     keys = body.keys()
     if len(body) <= 0\
@@ -100,78 +100,61 @@ def placesSearch():
             places = storage.all(Place).values()
             dcts = [pl.to_dict() for pl in places]
             if storage_t == 'db':
-                for idx in range(len(dcts)):
-                    if 'amenities' in dcts[idx].keys():
-                        del dcts[idx]['amenities']
-            if len(dcts) > 0 and dcts is not None:
-                return jsonify(dcts)
-            else:
-                return jsonify([])
+                for dct in dcts:
+                    if 'amenities' in dct:
+                        del dct['amenities']
+            return jsonify(dcts)
         else:
             places = storage.all(Place).values()
             unwanted = []
-            for idx, place in enumerate(places):
+            for place in places:
                 if storage_t == 'db':
                     amens_ids = [m.id for m in place.amenities]
                 else:
                     amens_ids = place.amenity_ids
                 for amenity_id in body['amenities']:
                     if amenity_id not in amens_ids:
-                        unwanted.append(idx)
+                        unwanted.append(place.id)
                         break
-            for idx, i in enumerate(unwanted):
-                del places[i - idx]
+            places = list(filter(lambda x: x.id not in unwanted, places))
             dcts = [pl.to_dict() for pl in places]
             if storage_t == 'db':
-                for idx in range(len(dcts)):
-                    if 'amenities' in dcts[idx].keys():
-                        del dcts[idx]['amenities']
-            if len(dcts) > 0 and dcts is not None:
-                return jsonify(dcts)
-            else:
-                return jsonify([])
-
+                for dct in dcts:
+                    if 'amenities' in dct:
+                        del dct['amenities']
+            return jsonify(dcts)
     places = storage.all(Place).values()
     wanted_places = []
     cities = {}
-
     if 'cities' in keys:
         for cityId in body['cities']:
             cities[cityId] = cityId
-
     if 'states' in keys:
         for state in storage.all(State).values():
             if state.id in body['states']:
                 for city in state.cities:
                     cities[city.id] = city.id
-
     for place in places:
-        if len(cities) > 0:
-            if place.city_id in cities:
-                wanted_places.append(place)
+        if place.city_id in cities:
+            wanted_places.append(place)
     unwanted = []
     if 'amenities' in keys:
-        for idx, place in enumerate(wanted_places):
+        for place in wanted_places:
             if storage_t == 'db':
                 amens_ids = [m.id for m in place.amenities]
             else:
                 amens_ids = place.amenity_ids
             for amenity_id in body['amenities']:
                 if amenity_id not in amens_ids:
-                    unwanted.append(idx)
+                    unwanted.append(place.id)
                     break
-
-    for idx, i in enumerate(unwanted):
-        del wanted_places[i - idx]
+    wanted_places = list(filter(lambda x: x.id not in unwanted, wanted_places))
     dcts = [pl.to_dict() for pl in wanted_places]
     if storage_t == 'db':
-        for idx in range(len(dcts)):
-            if 'amenities' in dcts[idx].keys():
-                del dcts[idx]['amenities']
-    if len(dcts) > 0 and dcts is not None:
-        return jsonify(dcts)
-    else:
-        return jsonify([])
+        for dct in dcts:
+            if 'amenities' in dct:
+                del dct['amenities']
+    return jsonify(dcts)
 
 
 @app_views.route('/places/<place_id>',
