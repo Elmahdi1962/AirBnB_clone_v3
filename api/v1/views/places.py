@@ -103,7 +103,10 @@ def placesSearch():
                 for idx in range(len(dcts)):
                     if 'amenities' in dcts[idx].keys():
                         del dcts[idx]['amenities']
-            return jsonify(dcts)
+            if len(dcts) > 0:
+                return jsonify(dcts)
+            else:
+                return jsonify([{}])
         else:
             places = storage.all(Place).values()
             unwanted = []
@@ -123,7 +126,10 @@ def placesSearch():
                 for idx in range(len(dcts)):
                     if 'amenities' in dcts[idx].keys():
                         del dcts[idx]['amenities']
-            return jsonify(dcts)
+            if len(dcts) > 0:
+                return jsonify(dcts)
+            else:
+                return jsonify([{}])
 
     places = storage.all(Place).values()
     wanted_places = []
@@ -162,7 +168,10 @@ def placesSearch():
         for idx in range(len(dcts)):
             if 'amenities' in dcts[idx].keys():
                 del dcts[idx]['amenities']
-    return jsonify(dcts)
+    if len(dcts) > 0:
+        return jsonify(dcts)
+    else:
+        return jsonify([{}])
 
 
 @app_views.route('/places/<place_id>',
