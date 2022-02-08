@@ -106,7 +106,7 @@ def placesSearch():
             if len(dcts) > 0:
                 return jsonify(dcts)
             else:
-                return jsonify([{}])
+                return jsonify({})
         else:
             places = storage.all(Place).values()
             unwanted = []
@@ -129,7 +129,7 @@ def placesSearch():
             if len(dcts) > 0:
                 return jsonify(dcts)
             else:
-                return jsonify([{}])
+                return jsonify({})
 
     places = storage.all(Place).values()
     wanted_places = []
@@ -171,7 +171,7 @@ def placesSearch():
     if len(dcts) > 0:
         return jsonify(dcts)
     else:
-        return jsonify([{}])
+        return jsonify({})
 
 
 @app_views.route('/places/<place_id>',
