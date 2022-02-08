@@ -79,7 +79,7 @@ class DBStorage:
         '''retrieves an object of type cls with the passed id
         or none if not found'''
         obj = None
-        if cls is not None:
+        if cls is not None and issubclass(cls, BaseModel):
             obj = self.__session.query(cls).filter(cls.id == id).first()
         return obj
 
